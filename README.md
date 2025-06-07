@@ -26,8 +26,8 @@
 | Frontend               | Backend              | Database       | Utilities           |
 |------------------------|----------------------|----------------|---------------------|
 | React.js               | Node.js              | MySQL          | JWT                 |
-| React Flow             | Express.js           | Sequelize (ORM)| Nodemailer          |
-| CSS Modules            | RESTful APIs         |                | Axios               |
+| React Flow             | Express.js           |                | Nodemailer          |
+| CSS Modules            | RESTful APIs         |                | FetchAPI            |
 
 ---
 
