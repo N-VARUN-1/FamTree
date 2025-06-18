@@ -189,7 +189,7 @@ export default function FamilyTree() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await fetch(`http://localhost:3000/api/fetchUser/${userEmail}`, {
+                const res = await fetch(`http://fam-tree-backend.vercel.app/api/fetchUser/${userEmail}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -327,7 +327,7 @@ export default function FamilyTree() {
                 formData.append('photo', photo);
             }
 
-            const response = await fetch('http://localhost:3000/api/add-family-tree', {
+            const response = await fetch('http://fam-tree-backend.vercel.app/api/add-family-tree', {
                 method: 'POST',
                 body: formData,
             });
@@ -364,7 +364,7 @@ export default function FamilyTree() {
     // useEffect(() => {
     //     const fetchTree = async () => {
     //         try {
-    //             const res = await fetch(`http://localhost:3000/api/family-tree/${userId}`);
+    //             const res = await fetch(`http://fam-tree-backend.vercel.app/api/family-tree/${userId}`);
     //             const data = await res.json();
 
     //             if (Array.isArray(data)) {
@@ -475,7 +475,7 @@ export default function FamilyTree() {
     //     if (upcoming.length > 0) {
     //         const uniqueBirthdays = upcoming.filter(b => { !notifiedBdays.includes(b.id) });
     //         if (uniqueBirthdays.length > 0) {
-    //             fetch('http://localhost:3000/api/bday-notification-email', {
+    //             fetch('http://fam-tree-backend.vercel.app/api/bday-notification-email', {
     //                 method: 'POST',
     //                 headers: {
     //                     'Content-Type': 'application/json',
@@ -502,7 +502,7 @@ export default function FamilyTree() {
         const fetchTreeAndNotify = async () => {
             try {
                 // 1. Fetch family tree data
-                const res = await fetch(`http://localhost:3000/api/family-tree/${userId}`);
+                const res = await fetch(`http://fam-tree-backend.vercel.app/api/family-tree/${userId}`);
                 const data = await res.json();
 
                 if (Array.isArray(data)) {
@@ -598,7 +598,7 @@ export default function FamilyTree() {
 
                         if (uniqueBirthdays.length > 0) {
                             try {
-                                await fetch('http://localhost:3000/api/bday-notification-email', {
+                                await fetch('http://fam-tree-backend.vercel.app/api/bday-notification-email', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
