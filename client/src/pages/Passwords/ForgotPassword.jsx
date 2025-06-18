@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Commet } from 'react-loading-indicators'
 import { CircularProgress } from '@mui/material'
 
 export default function ForgotPassword() {
