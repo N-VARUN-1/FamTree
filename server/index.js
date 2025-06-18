@@ -38,6 +38,7 @@ const app = express();
 // Ensure there's no trailing slash unless your frontend always includes it in requests.
 const allowedOrigins = [
   'https://fam-tree-frontend-djd4j3vxa-commandos-projects.vercel.app',
+  'http://fam-tree-frontend.vercel.app',
   // You might want to add your localhost for development:
   'http://localhost:5173', // or whatever port your frontend runs on (e.g., 3000, 8080, 5173 for Vite default)
   // Add other origins if necessary (e.g., specific preview deployments)
