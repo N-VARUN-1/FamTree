@@ -173,6 +173,7 @@ export default function FamilyTree() {
                     photo: updatedNode.data.photo,
                     location: updatedNode.data.location,
                 }),
+                credentials: 'include'
             });
         } catch (err) {
             console.error('Update failed:', err);
@@ -330,6 +331,7 @@ export default function FamilyTree() {
             const response = await fetch('https://fam-tree-backend.vercel.app/api/add-family-tree', {
                 method: 'POST',
                 body: formData,
+                credentials: 'include'
             });
 
             let finalNodes = updatedNodes;
@@ -607,6 +609,7 @@ export default function FamilyTree() {
                                         birthdays: uniqueBirthdays,
                                         email: currentUser.email
                                     }),
+                                    credentials: 'include'
                                 });
 
                                 // Update notifications in state and localStorage
