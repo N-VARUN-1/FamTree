@@ -8,7 +8,7 @@ export default function VerifyCode() {
         e.preventDefault();
         const email = localStorage.getItem("resetEmail");
 
-        const res = await fetch('http://localhost:3000/api/verifyCode', {
+        const res = await fetch('https://fam-tree-backend.vercel.app/api/verifyCode', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, code }),
