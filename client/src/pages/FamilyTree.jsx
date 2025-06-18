@@ -162,7 +162,7 @@ export default function FamilyTree() {
         console.log(updatedNode.id);
 
         try {
-            await fetch('http://localhost:3000/api/update-family-member', {
+            await fetch('http://fam-tree-backend.vercel.app/api/update-family-member', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
