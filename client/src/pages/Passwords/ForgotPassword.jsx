@@ -11,7 +11,7 @@ export default function ForgotPassword() {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch('http://fam-tree-backend.vercel.app/api/forgotPass', {
+            const res = await fetch('https://fam-tree-backend.vercel.app/api/forgotPass', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
