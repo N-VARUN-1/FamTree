@@ -14,7 +14,7 @@ export default function ResetPassword() {
 
         if (password !== confirm) return setError("Passwords do not match");
 
-        const res = await fetch("http://localhost:3000/api/resetPass", {
+        const res = await fetch("http://fam-tree-backend.vercel.app/api/resetPass", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
