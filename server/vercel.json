@@ -1,10 +1,10 @@
 {
   "version": 2,
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://fam-tree-backend.vercel.app"
-    }
+      {
+          "source": "/(.*)",
+          "destination": "/api"
+      }
   ],
   "headers": [
     {
