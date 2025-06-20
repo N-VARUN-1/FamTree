@@ -5,8 +5,8 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.js"
+      "source": "/api/(.*)",
+      "destination": "https://fam-tree-backend.vercel.app"
     }
   ],
   "headers": [
