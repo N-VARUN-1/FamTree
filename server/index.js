@@ -14,9 +14,6 @@ import express from 'express';
    allowedHeaders: ['Content-Type', 'Authorization']
  }));
 
- // Explicitly handle OPTIONS requests for all routes
- app.options('*', cors());
-
 // Add this BEFORE your routes
 app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
