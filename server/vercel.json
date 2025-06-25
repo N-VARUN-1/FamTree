@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "rewrites": [
+  "routes": [
       {
-          "source": "/(.*)",
-          "destination": "/api",
+          "src": "/(.*)",
+          "dest": "/index.js",
           "headers": [
             { "key": "Access-Control-Allow-Origin", "value": "*" },
             { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
