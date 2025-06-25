@@ -1,6 +1,7 @@
-import express from 'express';
+ import express from 'express';
  import dotenv from 'dotenv';
  import cors from 'cors';
+ import createProxyMiddleware from 'http-proxy-middleware';
 
  dotenv.config();
 
@@ -26,7 +27,10 @@ app.use((req, res, next) => {
   next();
 });
 
-
+const exampleProxy = createProxyMiddleware({
+  target: 'https://fam-tree-frontend.vercel.app', // target host with the same base path
+  changeOrigin: true, // needed for virtual hosted sites
+});
 
  app.use(express.json());
 
