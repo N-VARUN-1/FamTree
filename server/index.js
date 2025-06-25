@@ -32,6 +32,8 @@ const exampleProxy = createProxyMiddleware({
   changeOrigin: true, // needed for virtual hosted sites
 });
 
+app.use('/api', exampleProxy);
+
  app.use(express.json());
 
  import userRoutes from './routes/user.route.js';
