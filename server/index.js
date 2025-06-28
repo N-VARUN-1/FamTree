@@ -8,7 +8,7 @@
 
 app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', 'https://fam-tree-frontend.vercel.app'); 
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     return res.status(200).end(); // ✅ Critical for preflight
@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 
  // ✅ use cors middleware
  app.use(cors({
-   origin: 'https://fam-tree-frontend.vercel.app',
+   origin: '*',
    credentials: true,
    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
    allowedHeaders: ['Content-Type', 'Authorization']
