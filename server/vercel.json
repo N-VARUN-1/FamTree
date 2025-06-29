@@ -8,7 +8,7 @@
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/api/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Origin", "value": "https://fam-tree-frontend.vercel.app" },
         { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE" },
