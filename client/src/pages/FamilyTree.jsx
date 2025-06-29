@@ -162,7 +162,7 @@ export default function FamilyTree() {
         console.log(updatedNode.id);
 
         try {
-            await fetch('https://fam-tree-backend.vercel.app/api/update-family-member', {
+            await fetch('https://famtree-1.onrender.com/api/update-family-member', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -190,7 +190,7 @@ export default function FamilyTree() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await fetch(`https://fam-tree-backend.vercel.app/api/fetchUser/${userEmail}`, {
+                const res = await fetch(`https://famtree-1.onrender.com/api/fetchUser/${userEmail}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -328,7 +328,7 @@ export default function FamilyTree() {
                 formData.append('photo', photo);
             }
 
-            const response = await fetch('https://fam-tree-backend.vercel.app/api/add-family-tree', {
+            const response = await fetch('https://famtree-1.onrender.com/api/add-family-tree', {
                 method: 'POST',
                 body: formData,
                 credentials: 'include'
@@ -366,7 +366,7 @@ export default function FamilyTree() {
     // useEffect(() => {
     //     const fetchTree = async () => {
     //         try {
-    //             const res = await fetch(`https://fam-tree-backend.vercel.app/api/family-tree/${userId}`);
+    //             const res = await fetch(`https://famtree-1.onrender.com/api/family-tree/${userId}`);
     //             const data = await res.json();
 
     //             if (Array.isArray(data)) {
@@ -477,7 +477,7 @@ export default function FamilyTree() {
     //     if (upcoming.length > 0) {
     //         const uniqueBirthdays = upcoming.filter(b => { !notifiedBdays.includes(b.id) });
     //         if (uniqueBirthdays.length > 0) {
-    //             fetch('https://fam-tree-backend.vercel.app/api/bday-notification-email', {
+    //             fetch('https://famtree-1.onrender.com/api/bday-notification-email', {
     //                 method: 'POST',
     //                 headers: {
     //                     'Content-Type': 'application/json',
@@ -504,7 +504,7 @@ export default function FamilyTree() {
         const fetchTreeAndNotify = async () => {
             try {
                 // 1. Fetch family tree data
-                const res = await fetch(`https://fam-tree-backend.vercel.app/api/family-tree/${userId}`);
+                const res = await fetch(`https://famtree-1.onrender.com/api/family-tree/${userId}`);
                 const data = await res.json();
 
                 if (Array.isArray(data)) {
@@ -600,7 +600,7 @@ export default function FamilyTree() {
 
                         if (uniqueBirthdays.length > 0) {
                             try {
-                                await fetch('https://fam-tree-backend.vercel.app/api/bday-notification-email', {
+                                await fetch('https://famtree-1.onrender.com/api/bday-notification-email', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
