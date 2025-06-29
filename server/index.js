@@ -16,6 +16,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+
 
  // ✅ use cors middleware
  app.use(cors({
@@ -32,7 +37,7 @@ app.use((req, res, next) => {
 
  app.use('/api', userRoutes);
  app.use('/api', passRoute);
-
+ 
  app.listen(3000, () => {
      console.log("Server is running on port 3000");
  });
