@@ -18,7 +18,7 @@ export default function OAuth() {
         try {
             const resultsFromGoogle = await signInWithPopup(auth, provider);
             console.log(resultsFromGoogle);
-            const res = await fetch('https://fam-tree-backend.vercel.app/api/auth/google', {
+            const res = await fetch('https://famtree-1.onrender.com/api/auth/google', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
