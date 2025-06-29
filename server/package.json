@@ -1,5 +1,6 @@
 {
   "type": "module",
+  "build" : "npm run build",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
