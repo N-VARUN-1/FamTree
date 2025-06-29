@@ -1,6 +1,7 @@
 {
   "type": "module",
   "main" : "index.js",
+  "build" : "npm run build",
   "scripts": {
   "start": "sleep 5 && node index.js"
   },
