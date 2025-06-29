@@ -36,7 +36,7 @@ export default function Signup() {
 
         try {
             setLoading(true);
-            const res = await fetch('https://fam-tree-backend.vercel.app/api/signup', {
+            const res = await fetch('https://famtree-1.onrender.com/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
