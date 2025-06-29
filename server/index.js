@@ -16,10 +16,6 @@ const corsOptions = {
   optionsSuccessStatus: 200 
 };
 
-// Use cors middleware with the defined options
-app.use(cors(corsOptions));
-
-
 // Handle preflight OPTIONS requests
 app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
@@ -30,6 +26,9 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// Use cors middleware with the defined options
+app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
