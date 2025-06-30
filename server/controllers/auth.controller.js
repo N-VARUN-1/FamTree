@@ -1,9 +1,9 @@
-import jwt from 'jsonwebtoken';
-import bcryptjs from 'bcryptjs';
-import dotenv from 'dotenv';
-import db from '../db.js';
-
-dotenv.config();
+import User from '../models/user.model.js'
+import jwt from 'jsonwebtoken'
+import bcryptjs from 'bcryptjs'
+import dotenv from 'dotenv'
+import db from '../db.js'
+dotenv.config()
 
 export const signup = async (req, res) => {
     const { username, email, password } = req.body;
@@ -32,55 +32,62 @@ export const signup = async (req, res) => {
     }
 };
 
+
 export const signin = async (req, res) => {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
     try {
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Please enter email and password' });
+        if (!username || !email || !password) {
+            res.json("Please Enter all the fields");
         }
 
-        // Get user by email
-        const [results] = await db.query('SELECT * FROM user WHERE email = ?', [email]);
-        
-        if (results.length === 0) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
+        const sql = 'SELECT * FROM user WHERE email = ? AND password = ?';
 
-        const user = results[0];
-        
-        // Verify password
-        const validPassword = bcryptjs.compareSync(password, user.password);
-        if (!validPassword) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
+        db.query(sql, [email, password], (err, results) => {
+            if (err) {
+                console.err('Signin error', err);
+                return res.status(500).json({ message: 'Server Error' });
+            }
+            if (results.length > 0) {
+                const user = results[0];
 
-        // Create JWT token
-        const token = jwt.sign(
-            { id: user.id, email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
+                // Creating a JWT token
+                const token = jwt.sign(
+                    { id: user.id, email: user.email },
+                    process.env.JWT_SECRET
+                )
 
-        res.json({
-            message: 'SignIn Success',
-            token
-        });
+                res.json({
+                    message: 'SignIn Success',
+                    token
+                });
+            }
+            else {
+                res.status(401).json({ message: 'Invaid User' })
+            }
+        })
+
+        const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET)
+
     } catch (error) {
-        console.error('Signin error:', error);
-        res.status(500).json({ message: 'Server Error' });
+        res.json({ "Error": error });
     }
-};
+}
+
 
 export const fetchUser = async (req, res) => {
     const email = req.params.email;
 
     if (!email) {
+        console.log("No email provided");
         return res.status(400).json({ message: 'Email is required' });
     }
 
+    const query = 'SELECT id FROM user WHERE email = ?';
+
     try {
-        const [results] = await db.query('SELECT id FROM user WHERE email = ?', [email]);
-        
+        const [results] = await db.query(query, [email]);
+        // console.log(results[0]);
+
         if (results.length > 0) {
             return res.status(200).json(results[0]);
         } else {
@@ -92,20 +99,20 @@ export const fetchUser = async (req, res) => {
     }
 };
 
+
+
+// OAuth
 export const google = async (req, res, next) => {
-    const { name, email } = req.body;
+    const { name, email, googlePhotoURL } = req.body;
 
     try {
         // 1. Find user by email
         const [rows] = await db.query('SELECT * FROM user WHERE email = ?', [email]);
-        
-        if (rows.length > 0) {
-            const user = rows[0];
+        let user = rows[0];
+
+        if (user) {
             // User exists - create JWT
-            const token = jwt.sign(
-                { id: user.id, isAdmin: user.isAdmin }, 
-                process.env.JWT_SECRET
-            );
+            const token = jwt.sign({ id: user.id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
 
             // Don't send password
             const { password, ...rest } = user;
@@ -113,27 +120,30 @@ export const google = async (req, res, next) => {
             return res.status(200)
                 .cookie('access_token', token, { httpOnly: true })
                 .json(rest);
+
         } else {
             // User doesn't exist - create new user
+
             const generatePassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
             const hashedPassword = bcryptjs.hashSync(generatePassword, 10);
+
             const username = name.toLowerCase().split(' ').join('');
 
             // Insert new user
             const [result] = await db.query(
                 `INSERT INTO user (username, email, password) VALUES (?, ?, ?)`,
-                [username, email, hashedPassword]
+                [username, email, hashedPassword, googlePhotoURL]
             );
 
-            // Fetch the newly created user
-            const [newRows] = await db.query('SELECT * FROM user WHERE id = ?', [result.insertId]);
+            // Get the inserted user id
+            const newUserId = result.insertId;
+
+            // Fetch the newly created user row
+            const [newRows] = await db.query('SELECT * FROM user WHERE id = ?', [newUserId]);
             const newUser = newRows[0];
 
             // Generate JWT
-            const token = jwt.sign(
-                { id: newUser.id, isAdmin: newUser.isAdmin },
-                process.env.JWT_SECRET
-            );
+            const token = jwt.sign({ id: newUser.id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET);
 
             const { password, ...rest } = newUser;
 
@@ -142,29 +152,25 @@ export const google = async (req, res, next) => {
                 .json(rest);
         }
     } catch (error) {
-        console.error('Google OAuth error:', error);
         next(error);
     }
 };
 
+
 export const resetPass = async (req, res) => {
     const { newPassword } = req.body;
-    
     if (!newPassword) {
-        return res.status(400).json({ message: 'New password is required' });
+        return res.status(404).json({ message: 'Please fill all the fields !' });
     }
 
-    try {
-        const hashedPass = bcryptjs.hashSync(newPassword, 10);
-        const [result] = await db.query('UPDATE user SET password = ?', [hashedPass]);
-        
-        if (result.affectedRows > 0) {
-            return res.status(200).json({ message: 'Password reset successful' });
-        } else {
-            return res.status(404).json({ message: 'No users updated' });
+    const resetQuery = 'UPDATE user SET password = ?';
+    db.query(resetQuery, [newPassword], (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error Resetting Password' });
         }
-    } catch (error) {
-        console.error('Password reset error:', error);
-        return res.status(500).json({ message: 'Error resetting password' });
-    }
+
+        if (results.length > 0) {
+            return res.status(200).json({ message: 'Password Reset Successfull' });
+        }
+    })
 };
