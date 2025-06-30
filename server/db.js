@@ -9,7 +9,12 @@ const db = mysql.createPool({
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
-    port: process.env.MYSQLPORT
+    port: process.env.MYSQLPORT,
+    connectTimeout: 60000, // 60 seconds timeout
+    acquireTimeout: 60000, // 60 seconds to get connection
+    waitForConnections: true, // Queue requests if no connections available
+    connectionLimit: 10, // Max connections in pool
+    queueLimit: 0 // Unlimited queued requests
 });
 
 // connect to database
