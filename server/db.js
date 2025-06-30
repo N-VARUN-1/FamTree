@@ -5,7 +5,7 @@ dotenv.config();
 
 // create the connection
 const db = mysql.createPool({
-    host: process.env.RAILWAY_PRIVATE_DOMAIN,
+    host: process.env.MYSQLHOST,
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
