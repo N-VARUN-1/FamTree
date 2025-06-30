@@ -14,7 +14,10 @@ const db = mysql.createPool({
     acquireTimeout: 60000, // 60 seconds to get connection
     waitForConnections: true, // Queue requests if no connections available
     connectionLimit: 10, // Max connections in pool
-    queueLimit: 0 // Unlimited queued requests
+    queueLimit: 0, // Unlimited queued requests
+    ssl: {
+        rejectUnauthorized: false // Required for Railway
+    },
 });
 
 // connect to database
