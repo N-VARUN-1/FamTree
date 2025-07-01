@@ -15,7 +15,7 @@ const db = mysql.createPool({
     queueLimit: 0 // Unlimited queued requests
 });
 
-pool.getConnection()
+db.getConnection()
     .then(connection => {
         console.log("✅ Connected to the MySQL database!");
         connection.release(); // Release the connection back to the pool
