@@ -10,23 +10,18 @@ const db = mysql.createPool({
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
     port: process.env.MYSQLPORT,
-    connectTimeout: 60000, // 60 seconds timeout
-    acquireTimeout: 60000, // 60 seconds to get connection
     waitForConnections: true, // Queue requests if no connections available
     connectionLimit: 10, // Max connections in pool
-    queueLimit: 0, // Unlimited queued requests
-    ssl: {
-        rejectUnauthorized: false // Required for Railway
-    },
+    queueLimit: 0 // Unlimited queued requests
 });
 
-// connect to database
-// db.connect((err) => {
-//     if (err) {
-//         console.error('Database connection failed:', err.stack);
-//         return;
-//     }
-//     console.log('Connected to database.');
-// });
+pool.getConnection()
+    .then(connection => {
+        console.log("✅ Connected to the MySQL database!");
+        connection.release(); // Release the connection back to the pool
+    })
+    .catch(error => {
+        console.error("❌ Connection error:", error);
+    });
 
 export default db;
