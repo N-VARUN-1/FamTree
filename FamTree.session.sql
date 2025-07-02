@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS person (
     photo_url TEXT,
     location VARCHAR(255),
     created_by INT,
-    FOREIGN KEY (created_by) REFERENCES user(id) ON DELETE CASCADE
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS relationships (
     id INT AUTO_INCREMENT PRIMARY KEY,
