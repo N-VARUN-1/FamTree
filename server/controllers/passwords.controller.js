@@ -12,13 +12,13 @@ export const forgotPass = async (req, res) => {
     }
 
     try {
-        const [rows] = await db.execute('SELECT * FROM user WHERE email = ?', [email]);
+        const [rows] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
         if (rows.length === 0) {
             return res.status(404).json({ message: 'User with this email does not exist.' });
         }
 
         const resetCode = Math.floor(1000 + Math.random() * 9000).toString();
-        await db.execute('UPDATE user SET reset_code = ? WHERE email = ?', [resetCode, email]);
+        await db.execute('UPDATE users SET reset_code = ? WHERE email = ?', [resetCode, email]);
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -63,7 +63,7 @@ export const resetPass = async (req, res) => {
 
         // Update password in the database
         const [result] = await db.execute(
-            'UPDATE user SET password = ?, reset_code = NULL WHERE email = ?',
+            'UPDATE users SET password = ?, reset_code = NULL WHERE email = ?',
             [hashedPassword, email]
         );
 
@@ -93,7 +93,7 @@ export const verifyCode = async (req, res) => {
     }
 
     try {
-        const [rows] = await db.execute('SELECT reset_code FROM user WHERE email = ?', [email]);
+        const [rows] = await db.execute('SELECT reset_code FROM users WHERE email = ?', [email]);
 
         if (rows.length === 0) {
             return res.status(404).json({ message: 'User not found.' });
@@ -106,7 +106,7 @@ export const verifyCode = async (req, res) => {
         }
 
         // Optional: Invalidate the code after successful verification
-        await db.execute('UPDATE user SET reset_code = NULL WHERE email = ?', [email]);
+        await db.execute('UPDATE users SET reset_code = NULL WHERE email = ?', [email]);
 
         return res.status(200).json({ message: 'Code verified successfully.' });
 
