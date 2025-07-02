@@ -504,7 +504,12 @@ export default function FamilyTree() {
         const fetchTreeAndNotify = async () => {
             try {
                 // 1. Fetch family tree data
-                const res = await fetch(`https://famtree-1.onrender.com/api/family-tree/${userId}`);
+                const res = await fetch(`https://famtree-1.onrender.com/api/family-tree/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
                 const data = await res.json();
 
                 if (Array.isArray(data)) {
