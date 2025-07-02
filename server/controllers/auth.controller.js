@@ -13,7 +13,7 @@ export const signup = async (req, res) => {
         }
 
         // Check if user already exists
-        const [existingUser] = await db.query('SELECT * FROM user WHERE email = ?', [email]);
+        const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
         if (existingUser.length > 0) {
             return res.status(400).json({ message: 'User already exists!' });
         }
@@ -22,7 +22,7 @@ export const signup = async (req, res) => {
         const hashedPass = bcryptjs.hashSync(password, 10);
 
         // Insert new user
-        await db.query('INSERT INTO user (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPass]);
+        await db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPass]);
 
         // Success response
         res.status(201).json({ message: 'User registered successfully!' });
@@ -40,7 +40,7 @@ export const signin = async (req, res) => {
             res.json("Please Enter all the fields");
         }
 
-        const sql = 'SELECT * FROM user WHERE email = ? AND password = ?';
+        const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
 
         db.query(sql, [email, password], (err, results) => {
             if (err) {
@@ -82,7 +82,7 @@ export const fetchUser = async (req, res) => {
         return res.status(400).json({ message: 'Email is required' });
     }
 
-    const query = 'SELECT id FROM user WHERE email = ?';
+    const query = 'SELECT id FROM users WHERE email = ?';
 
     try {
         const [results] = await db.query(query, [email]);
@@ -107,7 +107,7 @@ export const google = async (req, res, next) => {
 
     try {
         // 1. Find user by email
-        const [rows] = await db.query('SELECT * FROM user WHERE email = ?', [email]);
+        const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
         let user = rows[0];
 
         if (user) {
@@ -131,7 +131,7 @@ export const google = async (req, res, next) => {
 
             // Insert new user
             const [result] = await db.query(
-                `INSERT INTO user (username, email, password) VALUES (?, ?, ?)`,
+                `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
                 [username, email, hashedPassword, googlePhotoURL]
             );
 
@@ -139,7 +139,7 @@ export const google = async (req, res, next) => {
             const newUserId = result.insertId;
 
             // Fetch the newly created user row
-            const [newRows] = await db.query('SELECT * FROM user WHERE id = ?', [newUserId]);
+            const [newRows] = await db.query('SELECT * FROM users WHERE id = ?', [newUserId]);
             const newUser = newRows[0];
 
             // Generate JWT
@@ -163,7 +163,7 @@ export const resetPass = async (req, res) => {
         return res.status(404).json({ message: 'Please fill all the fields !' });
     }
 
-    const resetQuery = 'UPDATE user SET password = ?';
+    const resetQuery = 'UPDATE users SET password = ?';
     db.query(resetQuery, [newPassword], (err, results) => {
         if (err) {
             return res.status(500).json({ message: 'Error Resetting Password' });
