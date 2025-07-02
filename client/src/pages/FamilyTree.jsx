@@ -505,10 +505,7 @@ export default function FamilyTree() {
             try {
                 // 1. Fetch family tree data
                 const res = await fetch(`https://famtree-1.onrender.com/api/family-tree/${userId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                    method: 'GET'
                 });
                 const data = await res.json();
 
