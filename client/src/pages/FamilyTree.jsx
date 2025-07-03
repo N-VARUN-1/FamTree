@@ -729,9 +729,9 @@ export default function FamilyTree() {
                 </ReactFlow>
             </div>
 
-            {/* <div className="rounded-lg pt-5">
+            <div className="rounded-lg pt-5">
                 <FamilyMap members={nodes} />
-            </div> */}
+            </div>
 
             {selectedNode && (
                 <div>
