@@ -317,6 +317,8 @@ export default function FamilyTree() {
             }
         });
 
+        setEdges(updatedEdges);
+
         try {
             const formData = new FormData();
             formData.append('newNodeId', newNodeId);
@@ -346,7 +348,7 @@ export default function FamilyTree() {
                 );
             }
 
-            setEdges(updatedEdges);
+            // setEdges(updatedEdges);
             const laidOutNodes = await layoutGraph(finalNodes, updatedEdges);
             setNodes(laidOutNodes);
 
