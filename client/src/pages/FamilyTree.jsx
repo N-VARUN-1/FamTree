@@ -663,14 +663,32 @@ export default function FamilyTree() {
                     required
                     className="w-full border p-2 rounded"
                 />
-                <input
+{/*                 <input
                     type="text"
                     placeholder="Relation"
                     value={relation}
                     onChange={(e) => setRelation(e.target.value)}
                     required
                     className="w-full border p-2 rounded"
-                />
+                /> */}
+                <select
+                    value={relation}
+                    onChange={(e) => setRelation(e.target.value)}
+                    required
+                    className="w-full border p-2 rounded"
+                >
+                    <option value="" disabled>Select Relation</option>
+                    <option value="parent">Parent</option>
+                    <option value="child">Child</option>
+                    <option value="sibling">Sibling</option>
+                    <option value="spouse">Spouse</option>
+                    <option value="grandparent">Grandparent</option>
+                    <option value="grandchild">Grandchild</option>
+                    <option value="uncle">Uncle</option>
+                    <option value="aunt">Aunt</option>
+                    <option value="cousin">Cousin</option>
+                    <option value="self">Self</option> {/* Added 'self' option */}
+                </select>
                 <input
                     type="date"
                     value={birthdate}
