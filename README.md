@@ -3,7 +3,7 @@
 **A modern web application for family tree management**  
 *Visualize, organize, and explore your family connections interactively.*
 
-![Famtree Demo](https://via.placeholder.com/800x400?text=Famtree+Demo) <!-- Replace with actual screenshot -->
+FamTree Live Link (https://fam-tree-frontend.vercel.app) <!-- Replace with actual screenshot -->
 
 ---
 
