@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import FamilyMap from '../components/FamilyMap';
 import ELK from 'elkjs/lib/elk.bundled.js';
 import { useSelector } from 'react-redux';
+import { CircularProgress } from '@mui/material';
 
 // Modal :
 import Box from '@mui/material/Box';
@@ -91,6 +92,7 @@ const style = {
 const nodeTypes = { custom: CustomNode };
 
 export default function FamilyTree() {
+    const [loading, setLoading] = useState(true);
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [childName, setChildName] = useState('');
@@ -625,12 +627,22 @@ export default function FamilyTree() {
                 }
             } catch (err) {
                 console.error('Error fetching tree or sending notifications:', err);
+            } finally {
+                setLoading(false); // Step 3: Update loading state
             }
         };
 
         fetchTreeAndNotify();
     }, [userId, currentUser?.email]); // Only re-run when userId or email changes
 
+    if (loading) {
+        // Step 2: Display loading indicator
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-50">
+                <CircularProgress /> {/* Loading spinner */}
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen p-4 bg-gray-50">
