@@ -317,6 +317,8 @@ export default function FamilyTree() {
             }
         });
 
+        setNodes(updatedNodes);
+        setUpcoming(getUpcomingBirthdays(updatedNodes));
         setEdges(updatedEdges);
 
         try {
