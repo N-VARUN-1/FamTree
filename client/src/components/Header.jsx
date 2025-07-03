@@ -32,6 +32,7 @@ export default function Header() {
     return (
         <Navbar fluid className="h-20 p-4 dark:bg-lime-400 z-999">
             <NavbarBrand href="/" className="">
+                <img src="/FT_log.png" alt="" />
                 <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-black">FamTree</span>
             </NavbarBrand>
             <div className="flex md:order-2 m-1">
