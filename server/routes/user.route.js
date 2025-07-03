@@ -3,16 +3,7 @@ import { signup, signin, fetchUser, google } from '../controllers/auth.controlle
 import { addNode, bdayNotification, getFamilyTree, updateFamilyTree } from '../controllers/familytree.controller.js';
 import multer from 'multer';
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, '/uploads/'); // Ensure this directory exists
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname); // Append timestamp to filename
-    }
-});
-
-const upload = multer({ storage });
+const upload = multer({ dest: 'uploads/' });
 
 const router = express.Router();
 
