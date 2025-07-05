@@ -33,45 +33,100 @@ export const signup = async (req, res) => {
 };
 
 
+// export const signin = async (req, res) => {
+//     const { username, email, password } = req.body;
+//     try {
+//         if (!username || !email || !password) {
+//             res.json("Please Enter all the fields");
+//         }
+
+//         const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
+
+//         db.query(sql, [email, password], (err, results) => {
+//             if (err) {
+//                 console.err('Signin error', err);
+//                 return res.status(500).json({ message: 'Server Error' });
+//             }
+//             if (results.length > 0) {
+//                 const user = results[0];
+
+//                 // Creating a JWT token
+//                 const token = jwt.sign(
+//                     { id: user.id, email: user.email },
+//                     process.env.JWT_SECRET
+//                 )
+
+//                 res.json({
+//                     message: 'SignIn Success',
+//                     token
+//                 });
+//             }
+//             else {
+//                 res.status(401).json({ message: 'Invaid User' })
+//             }
+//         })
+
+//         const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET)
+
+//     } catch (error) {
+//         res.json({ "Error": error });
+//     }
+// }
+
+
+
+
+
 export const signin = async (req, res) => {
     const { username, email, password } = req.body;
+
     try {
+        // Check for missing fields
         if (!username || !email || !password) {
-            res.json("Please Enter all the fields");
+            return res.status(400).json({ message: "Please enter all the fields" });
         }
 
-        const sql = 'SELECT * FROM users WHERE email = ? AND password = ?';
-
-        db.query(sql, [email, password], (err, results) => {
+        // SQL query to find the user by email
+        const sql = 'SELECT * FROM users WHERE email = ?';
+        db.query(sql, [email], async (err, results) => {
             if (err) {
-                console.err('Signin error', err);
+                console.error('Signin error', err);
                 return res.status(500).json({ message: 'Server Error' });
             }
+
+            // Check if user exists
             if (results.length > 0) {
                 const user = results[0];
 
-                // Creating a JWT token
-                const token = jwt.sign(
-                    { id: user.id, email: user.email },
-                    process.env.JWT_SECRET
-                )
+                // Compare the provided password with the hashed password in the database
+                const isMatch = await bcrypt.compare(password, user.password);
+                if (isMatch) {
+                    // Creating a JWT token
+                    const token = jwt.sign(
+                        { id: user.id, email: user.email },
+                        process.env.JWT_SECRET,
+                        { expiresIn: '1h' } // Optional: Set token expiration
+                    );
 
-                res.json({
-                    message: 'SignIn Success',
-                    token
-                });
+                    return res.json({
+                        message: 'SignIn Success',
+                        token
+                    });
+                } else {
+                    return res.status(401).json({ message: 'Invalid credentials' });
+                }
+            } else {
+                return res.status(401).json({ message: 'Invalid credentials' });
             }
-            else {
-                res.status(401).json({ message: 'Invaid User' })
-            }
-        })
-
-        const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET)
-
+        });
     } catch (error) {
-        res.json({ "Error": error });
+        console.error('Error during signin', error);
+        return res.status(500).json({ message: 'Server Error' });
     }
-}
+};
+
+
+
 
 
 export const fetchUser = async (req, res) => {
