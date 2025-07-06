@@ -87,8 +87,8 @@ export const signin = async (req, res) => {
         }
 
         // SQL query to find the user by email
-        const sql = 'SELECT * FROM users WHERE email = ?';
-        db.query(sql, [email], async (err, results) => {
+        const sql = 'SELECT * FROM users WHERE email = ? OR username = ?';
+        db.query(sql, [email , username], async (err, results) => {
             if (err) {
                 console.error('Signin error', err);
                 return res.status(500).json({ message: 'Server Error' });
