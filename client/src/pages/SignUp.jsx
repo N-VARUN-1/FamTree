@@ -54,7 +54,7 @@ export default function Signup() {
             setMessage({ type: 'success', text: data.message || 'User registered successfully!' });
             dispatch(setUser({ email, username }));
             setFormData({ username: '', email: '', password: '' });
-            navigate('/sign-in')
+            navigate('/')
 
         } catch (err) {
             setMessage({ type: 'error', text: err.message });
