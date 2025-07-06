@@ -13,7 +13,7 @@ export const signup = async (req, res) => {
         }
 
         // Check if user already exists
-        const [existingUser] = await db.query('SELECT * FROM user WHERE email = ?', [email]);
+        const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
         if (existingUser.length > 0) {
             return res.status(400).json({ message: 'User already exists!' });
         }
@@ -22,7 +22,7 @@ export const signup = async (req, res) => {
         const hashedPass = await bcrypt.hash(password, 10);
 
         // Insert new user
-        await db.query('INSERT INTO user (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPass]);
+        await db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPass]);
 
         // Success response
         res.status(201).json({ message: 'User registered successfully!' });
@@ -87,7 +87,7 @@ export const signin = async (req, res) => {
 
         // Allow login with either email or username
         const [results] = await db.query(
-            'SELECT * FROM user WHERE email = ? OR username = ?',
+            'SELECT * FROM users WHERE email = ? OR username = ?',
             [email || '', username || '']
         );
 
