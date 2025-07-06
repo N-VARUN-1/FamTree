@@ -1,6 +1,6 @@
 import User from '../models/user.model.js'
 import jwt from 'jsonwebtoken'
-import bcryptjs from 'bcryptjs'
+import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv'
 import db from '../db.js'
 dotenv.config()
@@ -13,16 +13,16 @@ export const signup = async (req, res) => {
         }
 
         // Check if user already exists
-        const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        const [existingUser] = await db.query('SELECT * FROM user WHERE email = ?', [email]);
         if (existingUser.length > 0) {
             return res.status(400).json({ message: 'User already exists!' });
         }
 
         // Hash password
-        const hashedPass = bcryptjs.hashSync(password, 10);
+        const hashedPass = await bcrypt.hash(password, 10);
 
         // Insert new user
-        await db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPass]);
+        await db.query('INSERT INTO user (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPass]);
 
         // Success response
         res.status(201).json({ message: 'User registered successfully!' });
@@ -81,44 +81,33 @@ export const signin = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
-        // Check for missing fields
-        if (!username || !email || !password) {
+        if ((!email && !username) || !password) {
             return res.status(400).json({ message: "Please enter all the fields" });
         }
 
-        // SQL query to find the user by email
-        const sql = 'SELECT * FROM users WHERE email = ? OR username = ?';
-        db.query(sql, [email , username], async (err, results) => {
-            if (err) {
-                console.error('Signin error', err);
-                return res.status(500).json({ message: 'Server Error' });
-            }
+        // Allow login with either email or username
+        const [results] = await db.query(
+            'SELECT * FROM user WHERE email = ? OR username = ?',
+            [email || '', username || '']
+        );
 
-            // Check if user exists
-            if (results.length > 0) {
-                const user = results[0];
+        if (results.length === 0) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
 
-                // Compare the provided password with the hashed password in the database
-                const isMatch = await bcrypt.compare(password, user.password);
-                if (isMatch) {
-                    // Creating a JWT token
-                    const token = jwt.sign(
-                        { id: user.id, email: user.email },
-                        process.env.JWT_SECRET,
-                        { expiresIn: '1h' } // Optional: Set token expiration
-                    );
+        const user = results[0];
+        const isMatch = await bcrypt.compare(password, user.password);
 
-                    return res.json({
-                        message: 'SignIn Success',
-                        token
-                    });
-                } else {
-                    return res.status(401).json({ message: 'Invalid credentials' });
-                }
-            } else {
-                return res.status(401).json({ message: 'Invalid credentials' });
-            }
-        });
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign(
+            { id: user.id, email: user.email },
+            process.env.JWT_SECRET
+        );
+
+        return res.json({ message: 'SignIn Success', token });
     } catch (error) {
         console.error('Error during signin', error);
         return res.status(500).json({ message: 'Server Error' });
