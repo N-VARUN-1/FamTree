@@ -169,13 +169,13 @@ export const google = async (req, res, next) => {
             // User doesn't exist - create new user
 
             const generatePassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
-            const hashedPassword = bcrypt.hash(generatePassword, 10);
+            const hashedPassword = await bcrypt.hash(generatePassword, 10);
 
             const username = name.toLowerCase().split(' ').join('');
 
             // Insert new user
             const [result] = await db.query(
-                `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
+                `INSERT INTO users (username, email, password) VALUES (?, ?, ?, ?)`,
                 [username, email, hashedPassword, googlePhotoURL]
             );
 
