@@ -175,8 +175,8 @@ export const google = async (req, res, next) => {
 
             // Insert new user
             const [result] = await db.query(
-                `INSERT INTO users (username, email, password) VALUES (?, ?, ?, ?)`,
-                [username, email, hashedPassword, googlePhotoURL]
+                `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
+                [username, email, hashedPassword]
             );
 
             // Get the inserted user id
