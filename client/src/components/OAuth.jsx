@@ -45,16 +45,24 @@ export default function OAuth() {
         }
     }
     return (
-        <Button type='button' gradientDuoTone='pinkToOrange' outline onClick={handleGoogleClick}>
+        <Button 
+            type='button' 
+            gradientDuoTone='pinkToOrange' 
+            outline 
+            onClick={handleGoogleClick}
+            disabled={loading}
+        >
             {loading ? (
                 <div className="flex items-center justify-center gap-2">
                     <CircularProgress size={20} color="inherit" />
                     <span>Processing...</span>
                 </div>
             ) : (
-                <AiFillGoogleCircle className='w-6 h-6 mr-2' />
-                Continue with Google
-            )
+                <div className="flex items-center gap-2">
+                    <AiFillGoogleCircle className='w-6 h-6' />
+                    <span>Continue with Google</span>
+                </div>
+            )}
         </Button>
     )
 }
