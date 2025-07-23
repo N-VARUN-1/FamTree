@@ -357,6 +357,7 @@ export default function FamilyTree() {
 
         } catch (err) {
             console.error('Error adding node:', err);
+            alert('Error adding member! Try again');
         }
 
         // Reset form fields
