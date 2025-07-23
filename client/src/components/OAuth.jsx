@@ -52,10 +52,8 @@ export default function OAuth() {
                     <span>Processing...</span>
                 </div>
             ) : (
-                <>
-                    <AiFillGoogleCircle className='w-6 h-6 mr-2' />
-                    Continue with Google
-                </>
+                <AiFillGoogleCircle className='w-6 h-6 mr-2' />
+                Continue with Google
             )
         </Button>
     )
