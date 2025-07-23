@@ -1,18 +1,21 @@
 import { Button } from 'flowbite-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { AiFillGoogleCircle } from 'react-icons/ai';
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
 import { app } from '../firebase';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
 export default function OAuth() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const auth = getAuth(app);
     const handleGoogleClick = async () => {
+        setLoading(true);
         const provider = new GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
         try {
@@ -37,12 +40,23 @@ export default function OAuth() {
             }
         } catch (error) {
             console.error(error);
+        }finally {
+            setLoading(false); // Ensure loading is set to false in all cases
         }
     }
     return (
         <Button type='button' gradientDuoTone='pinkToOrange' outline onClick={handleGoogleClick}>
-            <AiFillGoogleCircle className='w-6 h-6 mr-2' />
-            Continue with Google
+            {loading ? (
+                <div className="flex items-center justify-center gap-2">
+                    <CircularProgress size={20} color="inherit" />
+                    <span>Processing...</span>
+                </div>
+            ) : (
+                <>
+                    <AiFillGoogleCircle className='w-6 h-6 mr-2' />
+                    Continue with Google
+                </>
+            )
         </Button>
     )
 }
